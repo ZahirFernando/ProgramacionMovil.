@@ -1,0 +1,1 @@
+Elaboracion de Programa movil en donde se elaboro una pantalla sencilla con botones y texto, el programa no cuenta con funcionalidad alguna simplemente como lo que se pidio que seria la carcasa de este mismo
