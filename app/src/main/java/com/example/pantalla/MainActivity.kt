@@ -7,9 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,21 +21,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material3.Text
-import androidx.compose.foundation.border
+import androidx.compose.material3.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
-            LoginScreen()
+
+            var showRegister by remember { mutableStateOf(false) }
+
+            if (showRegister) {
+                CreateAccountScreen(
+                    onBack = { showRegister = false }
+                )
+            } else {
+                LoginScreen(
+                    onSignUpClick = { showRegister = true }
+                )
+            }
         }
     }
 }
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(onSignUpClick: () -> Unit) {
 
     Box(
         modifier = Modifier
@@ -42,7 +54,6 @@ fun LoginScreen() {
             .background(Color.Black),
         contentAlignment = Alignment.Center
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxWidth(0.85f)
@@ -51,7 +62,6 @@ fun LoginScreen() {
                 .padding(vertical = 40.dp, horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Image(
                 painter = painterResource(id = R.drawable.ic_launcher_foreground),
                 contentDescription = "Ilustración",
@@ -60,8 +70,6 @@ fun LoginScreen() {
                     .padding(bottom = 24.dp),
                 contentScale = ContentScale.Fit
             )
-
-            // Título
             Text(
                 text = "Hello",
                 fontSize = 28.sp,
@@ -71,23 +79,21 @@ fun LoginScreen() {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-
             Text(
-                text = "Welcome To Little Drop, where\nyou manage you daily tasks",
+                text = "Welcome To Little Drop, where\nyou manage your daily tasks",
                 fontSize = 14.sp,
                 color = Color.Gray,
                 textAlign = TextAlign.Center
             )
-
             Spacer(modifier = Modifier.height(32.dp))
 
-            // boton login
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
                     .clip(RoundedCornerShape(50))
-                    .background(Color(0xFF4B3FBB)),
+                    .background(Color(0xFF4B3FBB))
+                    .clickable { },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -100,7 +106,7 @@ fun LoginScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // boton sing up
+            // SIGN UP BUTTON
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -111,7 +117,8 @@ fun LoginScreen() {
                         width = 2.dp,
                         color = Color(0xFF4B3FBB),
                         shape = RoundedCornerShape(50)
-                    ),
+                    )
+                    .clickable { onSignUpClick() },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -133,11 +140,10 @@ fun LoginScreen() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(20.dp),
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 SocialCircle(Color(0xFF3b5998), "f")
-                SocialCircle(Color(0xFFDB4437), "G+")
+                SocialCircle(Color(0xFFDB4437), "G")
                 SocialCircle(Color(0xFF0A66C2), "in")
             }
         }
@@ -158,5 +164,94 @@ fun SocialCircle(color: Color, text: String) {
             color = Color.White,
             fontWeight = FontWeight.Bold
         )
+    }
+}
+
+@Composable
+fun CreateAccountScreen(onBack: () -> Unit) {
+
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var repeatPassword by remember { mutableStateOf("") }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+        contentAlignment = Alignment.Center
+    ) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(0.85f)
+                .clip(RoundedCornerShape(30.dp))
+                .background(Color.White)
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Text(
+                text = "Create account",
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Full Name") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Password") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = repeatPassword,
+                onValueChange = { repeatPassword = it },
+                label = { Text("Repeat Password") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(
+                onClick = {
+                    name = ""
+                    email = ""
+                    password = ""
+                    repeatPassword = ""
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Open Account")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            TextButton(onClick = onBack) {
+                Text("← Back")
+            }
+        }
     }
 }
