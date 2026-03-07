@@ -1,5 +1,6 @@
 package com.example.pantalla
 
+import Navigation.AppNavigation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.*
+import com.example.pantalla.ui.theme.PantallaTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,8 +31,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-
-            var showRegister by remember { mutableStateOf(false) }
+            PantallaTheme {
+                AppNavigation()
+            }
+           /* var showRegister by remember { mutableStateOf(false) }
 
             if (showRegister) {
                 CreateAccountScreen(
@@ -38,12 +42,12 @@ class MainActivity : ComponentActivity() {
                 )
             } else {
                 LoginScreen(
-                    onSignUpClick = { showRegister = true }
-                )
+                    onSignUpClick = { showRegister = true }*/
+
             }
         }
     }
-}
+
 
 @Composable
 fun LoginScreen(onSignUpClick: () -> Unit) {
@@ -255,5 +259,3 @@ fun CreateAccountScreen(onBack: () -> Unit) {
         }
     }
 }
-
-//zahir
